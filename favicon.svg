@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#2d6a4f"/>
+  <text x="256" y="200" font-family="system-ui,sans-serif" font-size="160" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">Vi</text>
+  <text x="256" y="360" font-family="system-ui,sans-serif" font-size="100" font-weight="600" fill="#d4a373" text-anchor="middle" dominant-baseline="central">En</text>
+</svg>
