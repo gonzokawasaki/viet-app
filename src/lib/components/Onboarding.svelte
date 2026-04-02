@@ -506,7 +506,7 @@
   }
   .option-btn.selected {
     border-color: var(--color-primary);
-    background: #f0f7f4;
+    background: #e8f4fb;
   }
   .option-en {
     font-weight: 600;
@@ -542,8 +542,8 @@
 
   /* Example sentence preview */
   .example-sentence {
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    background: #e8f4fb;
+    border: 1px solid #a8d0e6;
     border-radius: var(--radius-sm);
     padding: 10px 14px;
     display: flex;
@@ -551,8 +551,8 @@
     gap: 4px;
   }
   .example-sentence.summary {
-    background: #eff6ff;
-    border-color: #bfdbfe;
+    background: #fde8e3;
+    border-color: #f4a898;
   }
   .example-label {
     font-size: 0.75rem;

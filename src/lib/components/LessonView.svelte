@@ -114,7 +114,7 @@
         &#8592; Prev
       </button>
       <button class="btn-primary" onclick={next}>
-        {currentIndex < total - 1 ? 'Next &#8594;' : 'Finish ✓'}
+        {currentIndex < total - 1 ? 'Next →' : 'Finish ✓'}
       </button>
     </div>
   </div>
@@ -219,12 +219,12 @@
     text-decoration: underline;
   }
   .note-box {
-    background: #fef9c3;
+    background: #fde8e3;
     border-radius: var(--radius-sm);
     padding: 12px 14px;
     font-size: 0.9rem;
     line-height: 1.5;
-    color: #713f12;
+    color: #8b3a2a;
   }
   .secondary-sentence {
     padding-top: 12px;

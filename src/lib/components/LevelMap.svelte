@@ -119,7 +119,7 @@
   }
   .lesson-card.done {
     border-color: var(--color-success);
-    background: #f0fdf4;
+    background: #e8f4fb;
   }
   .lesson-card.locked {
     cursor: not-allowed;
