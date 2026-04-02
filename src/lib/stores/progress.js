@@ -34,6 +34,10 @@ function createProgressStore() {
     isCompleted(lessonId) {
       return get(store).completedLessons.includes(lessonId)
     },
+    reset() {
+      store.set({ completedLessons: [], currentLesson: null })
+      localStorage.removeItem(STORAGE_KEY)
+    },
   }
 }
 

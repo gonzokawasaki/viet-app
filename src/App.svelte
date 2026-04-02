@@ -34,9 +34,26 @@
     maritalStatus: 'Relationship',
     yearsMarried: 'Years Married',
     children: 'Children',
-    childrenAges: "Children's Ages",
+    childrenDetails: 'Children Details',
     interests: 'Interests',
     goal: 'Learning Goal',
+  }
+
+  function formatProfileValue(key, value) {
+    if (key === 'childrenDetails' && Array.isArray(value)) {
+      if (!value.length) return ''
+      return value
+        .filter(c => c.gender && c.gender !== '—')
+        .map(c => `${c.gender} (age ${c.age})`)
+        .join(', ')
+    }
+    return value
+  }
+
+  function resetProfile() {
+    profile.reset()
+    progress.reset()
+    navigate('#/')
   }
 </script>
 
@@ -51,13 +68,17 @@
       <div class="profile-page">
         <h2>Your Profile</h2>
         {#each Object.entries($profile) as [key, value]}
-          {#if value && value !== '—'}
+          {@const display = formatProfileValue(key, value)}
+          {#if display && display !== '—'}
             <div class="profile-row">
               <span class="profile-key">{profileLabels[key] || key}</span>
-              <span class="profile-val">{value}</span>
+              <span class="profile-val">{display}</span>
             </div>
           {/if}
         {/each}
+        <button class="btn-reset" onclick={resetProfile}>
+          Reset Profile / Xóa hồ sơ
+        </button>
       </div>
     {:else}
       <LevelMap {navigate} />
@@ -91,5 +112,21 @@
   }
   .profile-val {
     font-weight: 600;
+  }
+  .btn-reset {
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: 2px solid #fca5a5;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn-reset:hover {
+    background: #fecaca;
+    border-color: #f87171;
   }
 </style>

@@ -6,7 +6,7 @@ const DEFAULT_PROFILE = {
   name: '',
   nativeLanguage: '',       // 'vietnamese' or 'english'
   level: '',                // 'beginner', 'elementary', 'intermediate', 'upper-intermediate'
-  age: '',                  // 'under-18', '18-25', '26-40', '41-60', '60+'
+  age: '',                  // 'under-18', '18-25', '26-40', '40-60', '60+'
   city: '',                 // e.g. 'Ho Chi Minh City', 'Hanoi'
   job: '',                  // for adults — e.g. 'teacher', 'engineer'
   school: '',               // for students — e.g. 'Nguyen Hue High School'
@@ -14,7 +14,7 @@ const DEFAULT_PROFILE = {
   maritalStatus: '',        // 'single', 'in-a-relationship', 'married', 'divorced', 'widowed'
   yearsMarried: '',         // e.g. '5'
   children: '',             // '0', '1', '2', '3', '4+'
-  childrenAges: '',         // e.g. '3, 7'
+  childrenDetails: [],      // e.g. [{gender: 'son', age: '10'}, {gender: 'daughter', age: '7'}]
   interests: '',            // e.g. 'travel, food, technology'
   goal: '',                 // e.g. 'daily conversation', 'business', 'travel'
 }

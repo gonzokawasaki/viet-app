@@ -505,8 +505,44 @@ export function getLessonsByLevel(level) {
   return lessons.filter(l => l.level === level)
 }
 
+/** Build a children summary string from childrenDetails, e.g. "1 son and 2 daughters" */
+function buildChildrenSummary(details) {
+  if (!details || !details.length) return ''
+  const sons = details.filter(c => c.gender === 'son' && c.gender !== '—').length
+  const daughters = details.filter(c => c.gender === 'daughter' && c.gender !== '—').length
+  const parts = []
+  if (sons) parts.push(`${sons} son${sons > 1 ? 's' : ''}`)
+  if (daughters) parts.push(`${daughters} daughter${daughters > 1 ? 's' : ''}`)
+  return parts.join(' and ')
+}
+
+/** Build a children ages string, e.g. "10 and 7" or "10, 7, and 3" */
+function buildChildrenAges(details) {
+  if (!details || !details.length) return ''
+  const ages = details.filter(c => c.age && c.age !== '—').map(c => c.age)
+  if (ages.length === 0) return ''
+  if (ages.length === 1) return ages[0]
+  if (ages.length === 2) return `${ages[0]} and ${ages[1]}`
+  return ages.slice(0, -1).join(', ') + ', and ' + ages[ages.length - 1]
+}
+
+/** Map age range value to a readable English phrase */
+function ageRangeText(ageValue) {
+  const map = {
+    'under-18': 'under 18',
+    '18-25': '18-25',
+    '26-40': '26-40',
+    '40-60': '40-60',
+    '60+': 'over 60',
+  }
+  return map[ageValue] || ageValue || '[age]'
+}
+
 /** Replace [name], [city], [job], etc. placeholders with user profile values */
 export function personaliseSentence(text, profile) {
+  const childSummary = buildChildrenSummary(profile.childrenDetails)
+  const childAges = buildChildrenAges(profile.childrenDetails)
+
   return text
     .replace(/\[name\]/gi, profile.name || '[name]')
     .replace(/\[city\]/gi, profile.city || '[your city]')
@@ -515,9 +551,9 @@ export function personaliseSentence(text, profile) {
     .replace(/\[goal\]/gi, profile.goal || '[your goal]')
     .replace(/\[school\]/gi, profile.school || '[your school]')
     .replace(/\[grade\]/gi, profile.grade || '[your grade]')
-    .replace(/\[children\]/gi, profile.children || '[children]')
-    .replace(/\[childrenAges\]/gi, profile.childrenAges || '[ages]')
+    .replace(/\[children\]/gi, childSummary || profile.children || '[children]')
+    .replace(/\[childrenAges\]/gi, childAges || '[ages]')
     .replace(/\[yearsMarried\]/gi, profile.yearsMarried || '[years]')
     .replace(/\[number\]/gi, profile.children && profile.children !== '0' ? profile.children : '2')
-    .replace(/\[age\]/gi, profile.age || '[age]')
+    .replace(/\[age\]/gi, ageRangeText(profile.age))
 }

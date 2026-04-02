@@ -17,45 +17,81 @@
   let maritalStatus = $state('')
   let yearsMarried = $state('')
   let children = $state('')
-  let childrenAges = $state('')
+  let childrenDetails = $state([])
   let interests = $state('')
   let goal = $state('')
 
-  const isMinor = $derived(age === 'under-18')
-  const isMarried = $derived(maritalStatus === 'married')
-  const hasChildren = $derived(children && children !== '0')
+  // Shuffle helper (Fisher-Yates)
+  function shuffle(arr) {
+    const a = [...arr]
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]]
+    }
+    return a
+  }
 
-  // Build dynamic step list based on selections so far
+  // Generate a random order for question groups once on mount.
+  // Groups: name, nativeLanguage, level, age(+subs), city, family(marital+children+details), interests, goal
+  // We define group keys and shuffle them, then expand into steps dynamically.
+  const groupOrder = shuffle([
+    'name', 'nativeLanguage', 'level', 'age', 'city', 'family', 'interests', 'goal'
+  ])
+
+  // Build dynamic step list based on shuffled group order + current selections
   let steps = $derived.by(() => {
-    const s = [
-      { id: 'name', label: 'What is your name?', labelVi: 'Bạn tên gì?' },
-      { id: 'nativeLanguage', label: 'What is your native language?', labelVi: 'Tiếng mẹ đẻ của bạn là gì?' },
-      { id: 'level', label: 'What is your current level?', labelVi: 'Trình độ hiện tại của bạn?' },
-      { id: 'age', label: 'What is your age range?', labelVi: 'Bạn thuộc độ tuổi nào?' },
-      { id: 'city', label: 'Which city do you live in?', labelVi: 'Bạn sống ở thành phố nào?' },
-    ]
-
-    if (age === 'under-18') {
-      s.push({ id: 'school', label: 'What school do you go to?', labelVi: 'Bạn học trường nào?' })
-      s.push({ id: 'grade', label: 'What grade or year are you in?', labelVi: 'Bạn học lớp mấy?' })
-    } else if (age) {
-      s.push({ id: 'job', label: 'What is your job or occupation?', labelVi: 'Bạn làm nghề gì?' })
-    }
-
-    if (age && age !== 'under-18') {
-      s.push({ id: 'maritalStatus', label: 'What is your relationship status?', labelVi: 'Tình trạng hôn nhân của bạn?' })
-      if (maritalStatus === 'married') {
-        s.push({ id: 'yearsMarried', label: 'How many years have you been married?', labelVi: 'Bạn đã kết hôn bao nhiêu năm?' })
+    const s = []
+    for (const group of groupOrder) {
+      switch (group) {
+        case 'name':
+          s.push({ id: 'name', label: 'What is your name?', labelVi: 'Bạn tên gì?' })
+          break
+        case 'nativeLanguage':
+          s.push({ id: 'nativeLanguage', label: 'What is your native language?', labelVi: 'Tiếng mẹ đẻ của bạn là gì?' })
+          break
+        case 'level':
+          s.push({ id: 'level', label: 'What is your current level?', labelVi: 'Trình độ hiện tại của bạn?' })
+          break
+        case 'age':
+          s.push({ id: 'age', label: 'What is your age range?', labelVi: 'Bạn thuộc độ tuổi nào?' })
+          if (age === 'under-18') {
+            s.push({ id: 'school', label: 'What school do you go to?', labelVi: 'Bạn học trường nào?' })
+            s.push({ id: 'grade', label: 'What grade or year are you in?', labelVi: 'Bạn học lớp mấy?' })
+          } else if (age) {
+            s.push({ id: 'job', label: 'What is your job or occupation?', labelVi: 'Bạn làm nghề gì?' })
+          }
+          break
+        case 'city':
+          s.push({ id: 'city', label: 'Which city do you live in?', labelVi: 'Bạn sống ở thành phố nào?' })
+          break
+        case 'family':
+          if (age && age !== 'under-18') {
+            s.push({ id: 'maritalStatus', label: 'What is your relationship status?', labelVi: 'Tình trạng hôn nhân của bạn?' })
+            if (maritalStatus === 'married') {
+              s.push({ id: 'yearsMarried', label: 'How many years have you been married?', labelVi: 'Bạn đã kết hôn bao nhiêu năm?' })
+            }
+            s.push({ id: 'children', label: 'How many children do you have?', labelVi: 'Bạn có mấy con?' })
+            if (children && children !== '0') {
+              const count = children === '4+' ? 4 : parseInt(children)
+              for (let i = 0; i < count; i++) {
+                const ordinal = count === 1 ? '' : ` #${i + 1}`
+                s.push({
+                  id: `childDetail-${i}`,
+                  label: `Tell us about your child${ordinal}`,
+                  labelVi: `Cho biết về con${ordinal} của bạn`,
+                })
+              }
+            }
+          }
+          break
+        case 'interests':
+          s.push({ id: 'interests', label: 'What are your interests or hobbies?', labelVi: 'Sở thích của bạn là gì?' })
+          break
+        case 'goal':
+          s.push({ id: 'goal', label: 'What is your learning goal?', labelVi: 'Mục tiêu học tập của bạn là gì?' })
+          break
       }
-      s.push({ id: 'children', label: 'Do you have children?', labelVi: 'Bạn có con không?' })
-      if (children && children !== '0') {
-        s.push({ id: 'childrenAges', label: "What are your children's ages?", labelVi: 'Con bạn bao nhiêu tuổi?' })
-      }
     }
-
-    s.push({ id: 'interests', label: 'What are your interests or hobbies?', labelVi: 'Sở thích của bạn là gì?' })
-    s.push({ id: 'goal', label: 'What is your learning goal?', labelVi: 'Mục tiêu học tập của bạn là gì?' })
-
     return s
   })
 
@@ -63,11 +99,11 @@
   let totalSteps = $derived(steps.length)
 
   const ageOptions = [
-    { value: 'under-18', en: 'Under 18', vi: 'Dưới 18' },
-    { value: '18-25', en: '18 – 25', vi: '18 – 25' },
-    { value: '26-40', en: '26 – 40', vi: '26 – 40' },
-    { value: '41-60', en: '41 – 60', vi: '41 – 60' },
-    { value: '60+', en: '60+', vi: '60+' },
+    { value: 'under-18', en: 'Under 18', vi: 'Dưới 18', example: 'I am under 18 years old.' },
+    { value: '18-25', en: '18 – 25', vi: '18 – 25', example: 'I am 18-25 years old.' },
+    { value: '26-40', en: '26 – 40', vi: '26 – 40', example: 'I am 26-40 years old.' },
+    { value: '40-60', en: '40 – 60', vi: '40 – 60', example: 'I am 40-60 years old.' },
+    { value: '60+', en: '60+', vi: '60+', example: 'I am over 60 years old.' },
   ]
 
   const levelOptions = [
@@ -98,6 +134,11 @@
     { value: '4+', en: '4 or more', vi: '4 con trở lên' },
   ]
 
+  const childGenderOptions = [
+    { value: 'son', en: 'Son', vi: 'Con trai' },
+    { value: 'daughter', en: 'Daughter', vi: 'Con gái' },
+  ]
+
   const goalOptions = [
     { value: 'daily conversation', en: 'Daily conversation', vi: 'Giao tiếp hàng ngày' },
     { value: 'business', en: 'Business English', vi: 'Tiếng Anh thương mại' },
@@ -106,25 +147,55 @@
     { value: 'other', en: 'Other', vi: 'Khác' },
   ]
 
+  // Ensure childrenDetails array has enough entries
+  function ensureChildSlots(count) {
+    while (childrenDetails.length < count) {
+      childrenDetails.push({ gender: '', age: '' })
+    }
+  }
+
+  function getChildDetailIndex(stepId) {
+    const match = stepId.match(/^childDetail-(\d+)$/)
+    return match ? parseInt(match[1]) : -1
+  }
+
   function getValue(id) {
-    const map = { name, nativeLanguage, level, age, city, job, school, grade, maritalStatus, yearsMarried, children, childrenAges, interests, goal }
+    if (id.startsWith('childDetail-')) {
+      const idx = getChildDetailIndex(id)
+      const detail = childrenDetails[idx]
+      return detail && detail.gender && detail.age ? `${detail.gender}-${detail.age}` : ''
+    }
+    const map = { name, nativeLanguage, level, age, city, job, school, grade, maritalStatus, yearsMarried, children, interests, goal }
     return map[id] ?? ''
   }
 
   let canProceed = $derived(() => {
     const id = currentStep?.id
     if (!id) return false
+    if (id.startsWith('childDetail-')) {
+      const idx = getChildDetailIndex(id)
+      const detail = childrenDetails[idx]
+      return detail && detail.gender && detail.age.trim().length > 0
+    }
     const v = getValue(id)
     return typeof v === 'string' ? v.trim().length > 0 : false
   })
 
   function saveField(id, value) {
+    if (id.startsWith('childDetail-')) {
+      profile.setField('childrenDetails', [...childrenDetails])
+      return
+    }
     profile.setField(id, value)
   }
 
   function next() {
     const id = currentStep.id
-    saveField(id, getValue(id).trim())
+    if (id === 'children') {
+      const count = children === '4+' ? 4 : children ? parseInt(children) : 0
+      ensureChildSlots(count)
+    }
+    saveField(id, getValue(id)?.trim?.() ?? getValue(id))
 
     if (step >= totalSteps - 1) {
       onComplete()
@@ -135,7 +206,15 @@
 
   function skip() {
     const id = currentStep.id
-    saveField(id, '—')
+    if (id.startsWith('childDetail-')) {
+      const idx = getChildDetailIndex(id)
+      if (!childrenDetails[idx]) childrenDetails[idx] = { gender: '', age: '' }
+      childrenDetails[idx].gender = '—'
+      childrenDetails[idx].age = '—'
+      saveField(id, '')
+    } else {
+      saveField(id, '—')
+    }
     if (step >= totalSteps - 1) {
       onComplete()
       return
@@ -148,7 +227,26 @@
   }
 
   // Fields that can be skipped
-  const skippable = new Set(['school', 'grade', 'job', 'maritalStatus', 'yearsMarried', 'children', 'childrenAges'])
+  const skippable = new Set(['school', 'grade', 'job', 'maritalStatus', 'yearsMarried', 'children'])
+  function isSkippable(id) {
+    if (id.startsWith('childDetail-')) return true
+    return skippable.has(id)
+  }
+
+  function agePreview(ageValue) {
+    const opt = ageOptions.find(o => o.value === ageValue)
+    return opt?.example || ''
+  }
+
+  function childrenSummary() {
+    if (!childrenDetails.length) return ''
+    const sons = childrenDetails.filter(c => c.gender === 'son' && c.gender !== '—').length
+    const daughters = childrenDetails.filter(c => c.gender === 'daughter' && c.gender !== '—').length
+    const parts = []
+    if (sons) parts.push(`${sons} son${sons > 1 ? 's' : ''}`)
+    if (daughters) parts.push(`${daughters} daughter${daughters > 1 ? 's' : ''}`)
+    return parts.length ? `I have ${parts.join(' and ')}.` : ''
+  }
 </script>
 
 <div class="onboarding">
@@ -203,6 +301,12 @@
           </button>
         {/each}
       </div>
+      {#if age}
+        <div class="example-sentence">
+          <span class="example-label">Example / Ví dụ:</span>
+          <span class="example-text">{agePreview(age)}</span>
+        </div>
+      {/if}
 
     {:else if currentStep.id === 'city'}
       <input type="text" bind:value={city} placeholder="e.g. Ho Chi Minh City, Hanoi"
@@ -246,9 +350,49 @@
         {/each}
       </div>
 
-    {:else if currentStep.id === 'childrenAges'}
-      <input type="text" bind:value={childrenAges} placeholder="e.g. 3, 7, 12"
-        onkeydown={(e) => e.key === 'Enter' && canProceed() && next()} autofocus />
+    {:else if currentStep.id.startsWith('childDetail-')}
+      {@const idx = getChildDetailIndex(currentStep.id)}
+      {#if idx >= 0}
+        {(() => { ensureChildSlots(idx + 1); return '' })()}
+        <p class="child-prompt">Is this child a son or daughter? How old are they?</p>
+        <p class="child-prompt-vi">Con này là trai hay gái? Bao nhiêu tuổi?</p>
+
+        <div class="child-detail-form">
+          <div class="child-gender-options">
+            {#each childGenderOptions as opt}
+              <button class="option-btn compact" class:selected={childrenDetails[idx]?.gender === opt.value}
+                onclick={() => { ensureChildSlots(idx + 1); childrenDetails[idx].gender = opt.value }}>
+                <span class="option-en">{opt.en}</span>
+                <span class="option-vi">{opt.vi}</span>
+              </button>
+            {/each}
+          </div>
+
+          <div class="child-age-input">
+            <label class="child-age-label">Age / Tuổi</label>
+            <input type="number" min="0" max="60" placeholder="e.g. 10"
+              value={childrenDetails[idx]?.age ?? ''}
+              oninput={(e) => { ensureChildSlots(idx + 1); childrenDetails[idx].age = e.target.value }}
+              onkeydown={(e) => e.key === 'Enter' && canProceed() && next()} autofocus />
+          </div>
+        </div>
+
+        {#if childrenDetails[idx]?.gender && childrenDetails[idx]?.age}
+          <div class="example-sentence">
+            <span class="example-label">Example / Ví dụ:</span>
+            <span class="example-text">
+              My {childrenDetails[idx].gender} is {childrenDetails[idx].age} years old.
+            </span>
+          </div>
+        {/if}
+
+        {#if childrenSummary()}
+          <div class="example-sentence summary">
+            <span class="example-label">Summary / Tóm tắt:</span>
+            <span class="example-text">{childrenSummary()}</span>
+          </div>
+        {/if}
+      {/if}
 
     {:else if currentStep.id === 'interests'}
       <input type="text" bind:value={interests} placeholder="e.g. cooking, music, technology"
@@ -272,7 +416,7 @@
       <button class="btn-back" onclick={back}>&#8592; Back</button>
     {/if}
     <div class="right-actions">
-      {#if skippable.has(currentStep.id)}
+      {#if isSkippable(currentStep.id)}
         <button class="btn-skip" onclick={skip}>Skip / Bỏ qua</button>
       {/if}
       <button class="btn-primary" disabled={!canProceed()} onclick={next}>
@@ -357,6 +501,9 @@
     text-align: left;
     width: 100%;
   }
+  .option-btn.compact {
+    padding: 10px 14px;
+  }
   .option-btn.selected {
     border-color: var(--color-primary);
     background: #f0f7f4;
@@ -391,5 +538,67 @@
     color: var(--color-text-muted);
     font-size: 0.9rem;
     padding: 8px;
+  }
+
+  /* Example sentence preview */
+  .example-sentence {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .example-sentence.summary {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+  .example-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .example-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    font-style: italic;
+  }
+
+  /* Child detail form */
+  .child-prompt {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+  .child-prompt-vi {
+    font-size: 0.85rem;
+    color: var(--color-vi);
+    margin: 0;
+  }
+  .child-detail-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .child-gender-options {
+    display: flex;
+    gap: 10px;
+  }
+  .child-gender-options .option-btn {
+    flex: 1;
+  }
+  .child-age-input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .child-age-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
   }
 </style>
