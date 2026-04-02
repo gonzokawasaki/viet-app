@@ -67,68 +67,97 @@
   .level-map {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 32px;
   }
   h2 {
-    font-size: 1.4rem;
-    color: var(--color-primary-dark);
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    line-height: 1.1;
   }
   .greeting-vi {
-    color: var(--color-vi);
-    font-size: 0.9rem;
-    margin-top: -16px;
+    color: var(--color-primary);
+    font-size: 0.85rem;
+    font-style: italic;
+    margin-top: -24px;
   }
   .level-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
   }
   .level-group.locked {
-    opacity: 0.5;
+    opacity: 0.4;
   }
   .level-group h3 {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    font-size: 1rem;
-    color: var(--color-text);
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-primary);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
   }
   .level-vi {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    font-weight: 400;
+    font-size: 0.65rem;
+    color: var(--color-outline);
+    font-weight: 600;
+    letter-spacing: 0.1em;
   }
   .lesson-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-top: none;
   }
   .lesson-card {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: 14px;
+    padding: 16px 18px;
     background: var(--color-surface);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-sm);
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
     text-align: left;
     width: 100%;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .lesson-card:last-child {
+    border-bottom: none;
   }
   .lesson-card:not(:disabled):hover {
-    border-color: var(--color-primary-light);
+    background: var(--color-surface-low);
+    border-left: 4px solid var(--color-accent);
+    padding-left: 14px;
   }
   .lesson-card.done {
-    border-color: var(--color-success);
-    background: #e8f4fb;
+    border-left: 4px solid var(--color-accent);
+    padding-left: 14px;
+    background: var(--color-surface-low);
   }
   .lesson-card.locked {
     cursor: not-allowed;
   }
   .lesson-status {
-    font-size: 1.2rem;
-    width: 28px;
+    font-size: 0.9rem;
+    width: 24px;
     text-align: center;
     flex-shrink: 0;
+    color: var(--color-outline);
+  }
+  .lesson-card.done .lesson-status {
+    color: var(--color-accent);
+    font-weight: 900;
   }
   .lesson-info {
     flex: 1;
@@ -137,18 +166,23 @@
     gap: 2px;
   }
   .lesson-en {
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
   }
   .lesson-vi {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    color: var(--color-outline);
+    font-style: italic;
   }
   .sentence-count {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    background: var(--color-bg);
-    padding: 2px 8px;
-    border-radius: 12px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--color-outline);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--color-surface-low);
+    padding: 3px 8px;
+    border-radius: 0;
   }
 </style>

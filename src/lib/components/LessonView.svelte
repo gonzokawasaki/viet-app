@@ -124,7 +124,7 @@
   .lesson-view {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
     padding-bottom: 24px;
   }
   .lesson-header {
@@ -134,9 +134,16 @@
   }
   .back-btn {
     background: none;
-    font-size: 1.3rem;
-    padding: 6px 10px;
-    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    padding: 8px 12px;
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .back-btn:hover {
+    background: var(--color-primary);
+    color: white;
   }
   .lesson-title {
     flex: 1;
@@ -144,38 +151,50 @@
     flex-direction: column;
   }
   .title-en {
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 900;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
   }
   .title-vi {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    color: var(--color-outline);
+    font-style: italic;
   }
   .counter {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    font-weight: 600;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
   .progress-bar {
-    height: 4px;
-    background: var(--color-border);
-    border-radius: 2px;
+    height: 2px;
+    background: var(--color-surface-low);
     overflow: hidden;
   }
   .progress-fill {
     height: 100%;
-    background: var(--color-primary);
-    transition: width 0.3s ease;
-    border-radius: 2px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-gold));
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .sentence-card {
     background: var(--color-surface);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+    padding: 28px 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
+    position: relative;
+  }
+  .sentence-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-accent);
   }
   .primary-sentence, .secondary-sentence {
     display: flex;
@@ -183,60 +202,73 @@
     gap: 8px;
   }
   .lang-tag {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    padding: 2px 8px;
-    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    padding: 3px 10px;
     width: fit-content;
+    text-transform: uppercase;
   }
   .lang-tag.en {
-    background: #dbeafe;
-    color: var(--color-en);
+    background: var(--color-surface-low);
+    color: var(--color-accent);
   }
   .lang-tag.vi {
-    background: #fee2e2;
-    color: var(--color-vi);
+    background: var(--color-primary);
+    color: white;
   }
   .sentence-text {
     font-size: 1.25rem;
-    line-height: 1.6;
-    font-weight: 500;
+    line-height: 1.7;
+    font-weight: 400;
   }
   .reveal-btn {
-    background: var(--color-bg);
+    background: transparent;
     color: var(--color-primary);
-    font-size: 0.9rem;
-    padding: 10px;
-    border: 1px dashed var(--color-primary-light);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 12px;
+    border: 1px solid var(--color-primary);
     width: 100%;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .reveal-btn:hover {
+    background: var(--color-primary);
+    color: white;
   }
   .note-toggle {
     background: none;
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
+    color: var(--color-accent);
+    font-size: 0.7rem;
+    font-weight: 700;
     padding: 6px;
-    text-decoration: underline;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
   .note-box {
-    background: #fde8e3;
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
+    background: var(--color-surface-low);
+    border-left: 4px solid var(--color-accent);
+    padding: 14px 16px;
     font-size: 0.9rem;
-    line-height: 1.5;
-    color: #8b3a2a;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    font-style: italic;
   }
   .secondary-sentence {
-    padding-top: 12px;
+    padding-top: 16px;
     border-top: 1px solid var(--color-border);
   }
   .nav-buttons {
     display: flex;
-    gap: 10px;
+    gap: 0;
   }
   .nav-buttons .btn-secondary {
     flex: 0 0 auto;
-    padding: 12px 20px;
+    padding: 14px 20px;
+    border-right: none;
   }
   .nav-buttons .btn-primary {
     flex: 1;
@@ -248,33 +280,47 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 16px;
     min-height: 60dvh;
     text-align: center;
   }
   .done-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--color-success);
-    color: white;
-    font-size: 2rem;
+    width: 56px;
+    height: 56px;
+    background: var(--color-accent);
+    color: var(--color-text);
+    font-size: 1.5rem;
+    font-weight: 900;
     display: grid;
     place-items: center;
   }
+  .lesson-done h2 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
   .done-vi {
-    color: var(--color-vi);
+    color: var(--color-primary);
+    font-style: italic;
+    font-size: 0.9rem;
   }
   .done-stats {
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
+    color: var(--color-outline);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
   }
   .done-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
     width: 100%;
-    margin-top: 16px;
+    margin-top: 24px;
+  }
+  .done-actions .btn-secondary {
+    border-top: none;
   }
 
   /* Error */

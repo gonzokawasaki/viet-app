@@ -1,23 +1,27 @@
 :root {
-  --color-primary: #5b9ec9;
-  --color-primary-light: #82b8d9;
-  --color-primary-dark: #3a7da8;
-  --color-accent: #f07860;
-  --color-bg: #f4f9fc;
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b7280;
-  --color-border: #cde3f0;
-  --color-success: #22c55e;
-  --color-locked: #d1d5db;
-  --color-vi: #b91c1c;
-  --color-en: #1d4ed8;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  /* Imperial Scholar Palette */
+  --color-primary: #9E0027;
+  --color-primary-light: #C41E3A;
+  --color-primary-dark: #7A001E;
+  --color-accent: #705D00;
+  --color-accent-gold: #FFD700;
+  --color-bg: #FCF9F8;
+  --color-surface: #FFFFFF;
+  --color-surface-low: #F6F3F2;
+  --color-text: #1C1B1B;
+  --color-text-muted: #4A4545;
+  --color-outline: #8F6F6F;
+  --color-border: rgba(143, 111, 111, 0.2);
+  --color-success: #705D00;
+  --color-locked: #E3BEBD;
+  --color-vi: #9E0027;
+  --color-en: #705D00;
+  --radius: 0px;
+  --radius-sm: 0px;
+  --shadow: none;
+  --shadow-md: none;
   --max-width: 480px;
-  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Be Vietnam Pro', sans-serif;
 }
 
 * {
@@ -48,9 +52,11 @@ button {
   border: none;
   border-radius: var(--radius-sm);
   padding: 12px 24px;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: background 0.15s, transform 0.1s;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.1s;
 }
 
 button:active {
@@ -69,14 +75,20 @@ button:active {
 
 .btn-primary:disabled {
   background: var(--color-locked);
+  color: var(--color-outline);
   cursor: not-allowed;
   transform: none;
 }
 
 .btn-secondary {
-  background: var(--color-surface);
+  background: transparent;
   color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 input[type="text"],
@@ -84,17 +96,26 @@ input[type="number"],
 textarea {
   font-family: inherit;
   font-size: 1rem;
-  padding: 12px 16px;
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface);
+  padding: 12px 0;
+  border: none;
+  border-bottom: 2px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
   color: var(--color-text);
   width: 100%;
-  transition: border-color 0.15s;
+  transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 input:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Material Symbols baseline */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
 }

@@ -89,44 +89,56 @@
 <style>
   main {
     flex: 1;
-    padding: 16px;
+    padding: 24px 20px;
   }
   .profile-page {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0;
   }
   .profile-page h2 {
-    margin-bottom: 8px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--color-primary);
+    margin-bottom: 24px;
   }
   .profile-row {
     display: flex;
     justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--color-surface);
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow);
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-border);
   }
   .profile-key {
-    color: var(--color-text-muted);
+    color: var(--color-outline);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
   .profile-val {
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 0.9rem;
   }
   .btn-reset {
-    margin-top: 16px;
-    padding: 12px 20px;
-    background: #fee2e2;
-    color: #dc2626;
-    border: 2px solid #fca5a5;
-    border-radius: var(--radius-sm);
-    font-weight: 600;
-    font-size: 0.95rem;
+    margin-top: 32px;
+    padding: 14px 24px;
+    background: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    border-radius: 0;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
     cursor: pointer;
     text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .btn-reset:hover {
-    background: #fecaca;
-    border-color: #f87171;
+    background: var(--color-primary);
+    color: white;
   }
 </style>
